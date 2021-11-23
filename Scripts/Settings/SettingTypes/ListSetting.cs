@@ -87,5 +87,15 @@ namespace Settings
                 settings.Add(setting);
             return settings;
         }
+
+        public void AddItem(BaseSetting item)
+        {
+            Value.Add((T)item);
+        }
+
+        public void Clear()
+        {
+            Value.Clear();
+        }
     }
 }

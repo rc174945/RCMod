@@ -4,5 +4,6 @@
     {
         BoolSetting GetSkinsLocal();
         BoolSetting GetSkinsEnabled();
+        IListSetting GetSkinSets();
     }
 }

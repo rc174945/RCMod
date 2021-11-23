@@ -10,5 +10,7 @@ namespace Settings
         int GetCount();
         BaseSetting GetItemAt(int index);
         List<BaseSetting> GetItems();
+        void AddItem(BaseSetting item);
+        void Clear();
     }
 }
