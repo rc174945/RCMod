@@ -15,10 +15,10 @@ namespace ApplicationManagers
         public const string LauncherVersion = "1.0";
 
         // must be updated manually every time asset-bundle is changed. Format is YYYYMMDD.
-        public const int AssetBundleVersion = 20210625;
+        public const int AssetBundleVersion = 20211122;
 
         // must be manually changed every update
-        public const string GameVersion = "6/25/2021";
+        public const string GameVersion = "11/22/2021";
 
         public static void Init()
         {

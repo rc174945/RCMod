@@ -3184,7 +3184,8 @@ public class HERO : Photon.MonoBehaviour
         {
             ClothFactory.DisposeObject(this.setup.part_hair_2);
         }
-        GameMenu.ToggleEmoteWheel(false);
+        if (IsMine())
+            GameMenu.ToggleEmoteWheel(false);
     }
 
     public void pauseAnimation()

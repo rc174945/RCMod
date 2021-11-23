@@ -26,6 +26,9 @@ namespace UI
             header.Find("RightPanel/TrophyCountBronze/Image").GetComponent<Image>().color = UIManager.GetThemeColor(ThemePanel, "Trophy", "BronzeColor");
             header.Find("RightPanel/TrophyCountSilver/Image").GetComponent<Image>().color = UIManager.GetThemeColor(ThemePanel, "Trophy", "SilverColor");
             header.Find("RightPanel/TrophyCountGold/Image").GetComponent<Image>().color = UIManager.GetThemeColor(ThemePanel, "Trophy", "GoldColor");
+            header.Find("RightPanel/TrophyCountBronze/Label").GetComponent<Text>().color = UIManager.GetThemeColor(ThemePanel, "Trophy", "TextColor");
+            header.Find("RightPanel/TrophyCountSilver/Label").GetComponent<Text>().color = UIManager.GetThemeColor(ThemePanel, "Trophy", "TextColor");
+            header.Find("RightPanel/TrophyCountGold/Label").GetComponent<Text>().color = UIManager.GetThemeColor(ThemePanel, "Trophy", "TextColor");
             List<QuestItem> filtered = new List<QuestItem>();
             foreach (AchievmentItem item in GameProgressManager.GameProgress.Achievment.AchievmentItems.Value)
             {

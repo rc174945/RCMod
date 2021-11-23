@@ -157,9 +157,9 @@ namespace UI
         {
             float width;
             if (DoublePanel)
-                width = Width * 0.5f - HorizontalPadding * 2f;
+                width = GetPanelWidth() * 0.5f - HorizontalPadding * 2f;
             else
-                width = Width - HorizontalPadding * 2f;
+                width = GetPanelWidth() - HorizontalPadding * 2f;
             return ElementFactory.CreateHorizontalLine(parent, new ElementStyle(themePanel: ThemePanel), width, height);
         }
 

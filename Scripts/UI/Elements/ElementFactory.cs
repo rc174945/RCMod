@@ -156,8 +156,10 @@ namespace UI
             text.fontStyle = fontStyle;
             text.color = UIManager.GetThemeColor(style.ThemePanel, "DefaultLabel", "TextColor");
             text.alignment = alignment;
-            if (parent.GetComponent<VerticalLayoutGroup>() != null && parent.GetComponent<VerticalLayoutGroup>().childForceExpandWidth)
+            if (parent.GetComponent<VerticalLayoutGroup>() != null)
                 text.GetComponent<ContentSizeFitter>().horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
+            else
+                text.GetComponent<ContentSizeFitter>().horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
             return label;
         }
 

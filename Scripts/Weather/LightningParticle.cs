@@ -164,6 +164,7 @@ namespace Weather
         private IEnumerator StrikeCoroutine(bool sound)
         {
             Color color = LightningColor;
+            float maxAlpha = Application.loadedLevel == 0 ? 0.3f : 1f;
             color.a = 0f;
             _lineRenderer.SetColors(color, color);
             _lineRenderer.SetWidth(StartWidth, EndWidth);
@@ -171,20 +172,20 @@ namespace Weather
             while ((Time.time - startTime) < FadeInTime)
             {
                 float lerp = Mathf.Clamp((Time.time - startTime) / FadeInTime, 0f, 1f);
-                color.a = lerp * 1f;
+                color.a = lerp * maxAlpha;
                 _lineRenderer.SetColors(color, color);
                 yield return new WaitForEndOfFrame();
             }
             if (sound)
                 PlayAudio();
-            color.a = 1f;
+            color.a = maxAlpha;
             _lineRenderer.SetColors(color, color);
             yield return new WaitForSeconds(StayTime);
             startTime = Time.time;
             while ((Time.time - startTime) < FadeOutTime)
             {
                 float lerp = Mathf.Clamp((Time.time - startTime) / FadeOutTime, 0f, 1f);
-                color.a = (1f - lerp) * (1f - lerp);
+                color.a = (1f - lerp) * (1f - lerp) * maxAlpha;
                 _lineRenderer.SetColors(color, color);
                 SetVolume(0.3f * (1f - lerp));
                 yield return new WaitForEndOfFrame();
