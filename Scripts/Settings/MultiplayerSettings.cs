@@ -82,12 +82,6 @@ namespace Settings
             CurrentMultiplayerServerType = MultiplayerServerType.Cloud;
             FengGameManagerMKII.instance.OnJoinedLobby();
         }
-
-        protected override void LoadLegacy()
-        {
-            Name.Value = PlayerPrefs.GetString("name", Name.Value);
-            Guild.Value = PlayerPrefs.GetString("guildname", Guild.Value);
-        }
     }
 
     public enum MultiplayerServerType
