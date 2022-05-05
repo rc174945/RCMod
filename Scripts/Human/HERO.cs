@@ -196,7 +196,7 @@ class HERO : Photon.MonoBehaviour
 
     public void EmoteAction(string animation)
     {
-        if (state != HERO_STATE.Grab)
+        if (state != HERO_STATE.Grab && state!= HERO_STATE.AirDodge)
         {
             state = HERO_STATE.Salute;
             crossFade(animation, 0.1f);
@@ -985,7 +985,7 @@ class HERO : Photon.MonoBehaviour
 
     private void dash(float horizontal, float vertical)
     {
-        if (((this.dashTime <= 0f) && (this.currentGas > 0f)) && !this.isMounted && _dashCooldownLeft <= 0f && _state != HERO_STATE.Salute)
+        if (((this.dashTime <= 0f) && (this.currentGas > 0f)) && !this.isMounted && _dashCooldownLeft <= 0f)
         {
             this.useGas(this.totalGas * 0.04f);
             this.facingDirection = this.getGlobalFacingDirection(horizontal, vertical);
