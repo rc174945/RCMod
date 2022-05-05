@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Utility;
+using System.Threading;
+using ApplicationManagers;
 
 namespace CustomSkins
 {
@@ -45,7 +47,7 @@ namespace CustomSkins
             "http://",
             "www."
         };
-        const int MaxConcurrentDownloads = 3;
+        const int MaxConcurrentDownloads = 1;
         static int CurrentConcurrentDownloads = 0;
 
         public static void ResetConcurrentDownloads()
@@ -88,7 +90,7 @@ namespace CustomSkins
             return false;
         }
 
-        public static IEnumerator DownloadTexture(string url, bool mipmap, int maxSize)
+        public static IEnumerator DownloadTexture(BaseCustomSkinLoader obj, string url, bool mipmap, int maxSize)
         {
             // return a blank texture if an error is encountered
             Texture2D blankTexture = CreateBlankTexture(mipmap);
@@ -108,7 +110,9 @@ namespace CustomSkins
                     yield break;
                 }
                 OnStopTextureDownload();
-                yield return CreateTextureFromData(www, mipmap);
+                CoroutineWithData cwd = new CoroutineWithData(obj, CreateTextureFromData(obj, www, mipmap));
+                yield return cwd.Coroutine;
+                yield return cwd.Result;
             }
         }
 
@@ -151,46 +155,47 @@ namespace CustomSkins
                 return new Texture2D(4, 4, TextureFormat.RGBA32, mipmap);
         }
 
-        private static Texture2D LoadNormalTexture(WWW www, bool mipmap)
+        private static Texture2D DecodeTexture(WWW www, bool mipmap)
         {
-            Texture2D finalTexture = CreateBlankTexture(mipmap, compressed: true);
+            Texture2D texture = CreateBlankTexture(mipmap, false);
             try
             {
-                www.LoadImageIntoTexture(finalTexture);
+                texture.LoadImage(www.bytes);
             }
             catch
             {
-                // mipmapping failed, make a texture with no mipmap
-                finalTexture = CreateBlankTexture(false, compressed: true);
-                www.LoadImageIntoTexture(finalTexture);
+                // mipmapping failed, try loading without mipmap
+                texture = CreateBlankTexture(false, false);
+                texture.LoadImage(www.bytes);
             }
-            return finalTexture;
+            return texture;
         }
 
-        private static Texture2D LoadResizedTexture(WWW www, bool mipmap, int size)
-        {
-            Texture2D scaledTexture = CreateBlankTexture(mipmap, compressed: false);
-            www.LoadImageIntoTexture(scaledTexture);
-            TextureScale.Bilinear(scaledTexture, size, size);
-            scaledTexture.Compress(true);
-            scaledTexture.Apply(true);
-            return scaledTexture;
-        }
-
-        private static Texture2D CreateTextureFromData(WWW www, bool mipmap)
+        private static IEnumerator CreateTextureFromData(BaseCustomSkinLoader obj, WWW www, bool mipmap)
         {
             int resizedSize = 0;
-            Texture2D downloadedTexture = www.texture;
-            int downloadedWidth = downloadedTexture.width;
-            int downloadedHeight = downloadedTexture.height;
+            Texture2D texture = DecodeTexture(www, mipmap);
+            yield return obj.StartCoroutine(Util.WaitForFrames(2));
+            int downloadedWidth = texture.width;
+            int downloadedHeight = texture.height;
             if (!IsPowerOfTwo(downloadedWidth))
                 resizedSize = GetClosestPowerOfTwo(downloadedWidth);
             else if (!IsPowerOfTwo(downloadedHeight))
                 resizedSize = GetClosestPowerOfTwo(downloadedHeight);
             if (resizedSize == 0)
-                return LoadNormalTexture(www, mipmap);
+            {
+                texture.Compress(true);
+                yield return obj.StartCoroutine(Util.WaitForFrames(2));
+                yield return texture;
+            }
             else
-                return LoadResizedTexture(www, mipmap, resizedSize);
+            {
+                yield return obj.StartCoroutine(TextureScaler.Scale(texture, resizedSize, resizedSize));
+                yield return obj.StartCoroutine(Util.WaitForFrames(2));
+                texture.Compress(true);
+                yield return obj.StartCoroutine(Util.WaitForFrames(2));
+                yield return texture;
+            }
         }
     }
 }

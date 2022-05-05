@@ -1,10 +1,11 @@
+using CustomSkins;
 using Photon;
 using System;
 using System.Collections;
 using System.Runtime.InteropServices;
 using UnityEngine;
 
-public class Bullet : Photon.MonoBehaviour
+class Bullet : Photon.MonoBehaviour
 {
     private Vector3 heightOffSet = ((Vector3) (Vector3.up * 0.48f));
     private bool isdestroying;
@@ -25,6 +26,46 @@ public class Bullet : Photon.MonoBehaviour
     private ArrayList spiralNodes;
     private Vector3 velocity = Vector3.zero;
     private Vector3 velocity2 = Vector3.zero;
+
+    private bool _hasSkin;
+    private float _lastLength;
+    private float _skinTiling;
+    private bool _isTransparent;
+
+    private void SetSkin()
+    {
+        HumanCustomSkinLoader loader = master.GetComponent<HERO>()._customSkinLoader;
+        HookCustomSkinPart part = left? loader.HookL : loader.HookR;
+        if (part == null)
+            return;
+        if (part.HookMaterial != null)
+        {
+            _hasSkin = true;
+            lineRenderer.material = part.HookMaterial;
+            _skinTiling = left ? loader.HookLTiling : loader.HookRTiling;
+        }
+        if (part.Transparent)
+        {
+            _hasSkin = true;
+            _isTransparent = true;
+            lineRenderer.enabled = false;
+        }
+    }
+
+    private void UpdateSkin()
+    {
+        if (_hasSkin)
+        {
+            if (_isTransparent)
+                return;
+            float ropeLength = (transform.position - myRef.transform.position).magnitude;
+            if (ropeLength != _lastLength)
+            {
+                _lastLength = ropeLength;
+                lineRenderer.material.mainTextureScale = new Vector2(_skinTiling * ropeLength, 1f);
+            }
+        }
+    }
 
     public void checkTitan()
     {
@@ -273,6 +314,7 @@ public class Bullet : Photon.MonoBehaviour
             }
             base.transform.position = this.myRef.transform.position;
             base.transform.rotation = Quaternion.LookRotation(v.normalized);
+            SetSkin();
         }
     }
 
@@ -423,9 +465,10 @@ public class Bullet : Photon.MonoBehaviour
         this.velocity2 = v2;
         this.left = l;
         base.transform.rotation = Quaternion.LookRotation(value.normalized);
+        SetSkin();
     }
 
-    private void Start()
+    private void Awake()
     {
         this.rope = (GameObject) UnityEngine.Object.Instantiate(Resources.Load("rope"));
         this.lineRenderer = this.rope.GetComponent<LineRenderer>();
@@ -558,6 +601,7 @@ public class Bullet : Photon.MonoBehaviour
                     }
                 }
             }
+            UpdateSkin();
         }
     }
 }

@@ -13,7 +13,7 @@ using Settings;
 using UI;
 using GameProgress;
 
-public class TITAN : Photon.MonoBehaviour
+class TITAN : Photon.MonoBehaviour
 {
     [CompilerGenerated]
     private static Dictionary<string, int> fswitchSmap5;
@@ -137,6 +137,18 @@ public class TITAN : Photon.MonoBehaviour
     private HashSet<string> _fastHeadRotationAnimations;
     private bool _ignoreLookTarget;
     private bool _fastHeadRotation;
+
+    // extremely hacky, just move the titan far away to hide it
+    private void HideTitanIfBomb()
+    {
+        if (IN_GAME_MAIN_CAMERA.gametype != GAMETYPE.SINGLE && PhotonNetwork.isMasterClient)
+        {
+            if (SettingsManager.LegacyGameSettings.BombModeEnabled.Value && SettingsManager.LegacyGameSettings.BombModeDisableTitans.Value)
+            {
+                transform.position = new Vector3(-10000f, -10000f, -10000f);
+            }
+        }
+    }
 
     public bool WillDIe(int damage)
     {
@@ -573,6 +585,7 @@ public class TITAN : Photon.MonoBehaviour
                 _fastHeadRotationAnimations.Add(state.name);
             }
         }
+        HideTitanIfBomb();
     }
 
     private void CheckAnimationLookTarget(string animation)

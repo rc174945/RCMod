@@ -8,7 +8,7 @@ using System;
 using Constants;
 using Weather;
 
-public class IN_GAME_MAIN_CAMERA : MonoBehaviour
+class IN_GAME_MAIN_CAMERA : MonoBehaviour
 {
     public RotationAxes axes;
     public AudioSource bgmusic;
@@ -645,7 +645,16 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
                 FullscreenHandler.ToggleFullscreen();
                 needSetHUD = true;
             }
-            if (SettingsManager.InputSettings.General.Restart.GetKeyDown())
+            if (SettingsManager.InputSettings.General.RestartGame.GetKeyDown())
+            {
+                if (gametype != GAMETYPE.SINGLE && PhotonNetwork.isMasterClient)
+                {
+                    object[] objArray = new object[] { "<color=#FFCC00>MasterClient has restarted the game!</color>", "" };
+                    FengGameManagerMKII.instance.photonView.RPC("Chat", PhotonTargets.All, objArray);
+                    FengGameManagerMKII.instance.restartRC();
+                }
+            }
+            if (SettingsManager.InputSettings.General.RestartGame.GetKeyDown() || SettingsManager.InputSettings.General.ChangeCharacter.GetKeyDown())
             {
                 this.reset();
             }

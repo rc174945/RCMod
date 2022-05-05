@@ -39,6 +39,9 @@ namespace Settings
         public BoolSetting PointModeEnabled = new BoolSetting(false);
         public IntSetting PointModeAmount = new IntSetting(25, minValue: 1);
         public BoolSetting BombModeEnabled = new BoolSetting(false);
+        public BoolSetting BombModeCeiling = new BoolSetting(true);
+        public BoolSetting BombModeInfiniteGas = new BoolSetting(true);
+        public BoolSetting BombModeDisableTitans = new BoolSetting(true);
         public IntSetting TeamMode = new IntSetting(0, minValue: 0);
         public BoolSetting InfectionModeEnabled = new BoolSetting(false);
         public IntSetting InfectionModeAmount = new IntSetting(1, minValue: 1);
@@ -56,10 +59,12 @@ namespace Settings
         public BoolSetting GlobalMinimapDisable = new BoolSetting(false);
         public BoolSetting PreserveKDR = new BoolSetting(false);
         public BoolSetting RacingEndless = new BoolSetting(false);
+        public FloatSetting RacingStartTime = new FloatSetting(20f, minValue: 1f);
         public BoolSetting EndlessRespawnEnabled = new BoolSetting(false);
         public IntSetting EndlessRespawnTime = new IntSetting(0, minValue: 5);
         public BoolSetting KickShifters = new BoolSetting(false);
         public BoolSetting AllowHorses = new BoolSetting(false);
         public StringSetting Motd = new StringSetting(string.Empty, maxLength: 1000);
+        public BoolSetting GlobalHideNames = new BoolSetting(false);
     }
 }

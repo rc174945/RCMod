@@ -35,8 +35,10 @@ namespace UI
                 tooltip: "Preserve player stats when they leave and rejoin the room.");
             ElementFactory.CreateToggleSetting(DoublePanelRight, style, settings.RacingEndless, "Endless racing",
                 tooltip: "Racing round continues even if someone finishes.");
+            ElementFactory.CreateInputSetting(DoublePanelRight, style, settings.RacingStartTime, "Racing start time", elementWidth: inputWidth);
             ElementFactory.CreateToggleSetting(DoublePanelRight, style, settings.KickShifters, "Kick shifters");
             ElementFactory.CreateToggleSetting(DoublePanelRight, style, settings.AllowHorses, "Allow horses");
+            ElementFactory.CreateToggleSetting(DoublePanelRight, style, settings.GlobalHideNames, "Global hide names");
             ElementFactory.CreateInputSetting(DoublePanelRight, new ElementStyle(titleWidth: 160f, themePanel: ThemePanel), settings.Motd, "MOTD",
                 elementWidth: 200f);
         }

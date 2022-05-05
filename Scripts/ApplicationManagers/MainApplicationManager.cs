@@ -6,6 +6,7 @@ using Weather;
 using System.Collections;
 using GameProgress;
 using Map;
+using CustomSkins;
 
 namespace ApplicationManagers
 {
@@ -50,6 +51,7 @@ namespace ApplicationManagers
             WeatherManager.Init();
             GameProgressManager.Init();
             MapManager.Init();
+            MaterialCache.Init();
             if (ApplicationConfig.DevelopmentMode)
             {
                 DebugTesting.Init();

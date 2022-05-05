@@ -59,7 +59,7 @@ namespace UI
 
         public static void SetMenu(MenuType menu)
         {
-            _currentUITheme = SettingsManager.UISettings.Theme.Value;
+            _currentUITheme = SettingsManager.UISettings.UITheme.Value;
             if (CurrentMenu != null)
                 Destroy(CurrentMenu);
             switch (menu)
@@ -241,9 +241,9 @@ namespace UI
                 if (!_uiThemes.ContainsKey(json["Name"]))
                     _uiThemes.Add(json["Name"].Value, json);
             }
-            if (!_uiThemes.ContainsKey(SettingsManager.UISettings.Theme.Value))
+            if (!_uiThemes.ContainsKey(SettingsManager.UISettings.UITheme.Value))
             {
-                SettingsManager.UISettings.Theme.Value = "Light";
+                SettingsManager.UISettings.UITheme.Value = "Dark";
                 SettingsManager.UISettings.Save();
             }
         }

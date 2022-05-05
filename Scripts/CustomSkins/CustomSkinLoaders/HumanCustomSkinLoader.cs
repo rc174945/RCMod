@@ -5,6 +5,7 @@ using System.Linq;
 using Xft;
 using System.Collections;
 using Settings;
+using Utility;
 
 namespace CustomSkins
 {
@@ -12,6 +13,10 @@ namespace CustomSkins
     {
         protected override string RendererIdPrefix { get { return "human"; } }
         private int _horseViewId;
+        public HookCustomSkinPart HookL;
+        public HookCustomSkinPart HookR;
+        public float HookLTiling = 1f;
+        public float HookRTiling = 1f;
 
         public override IEnumerator LoadSkinsFromRPC(object[] data)
         {
@@ -25,9 +30,29 @@ namespace CustomSkins
                     continue;
                 else if (partId == (int)HumanCustomSkinPartId.Gas && !SettingsManager.CustomSkinSettings.Human.GasEnabled.Value)
                     continue;
+                else if (partId == (int)HumanCustomSkinPartId.HookLTiling && skinUrls.Length > partId)
+                {
+                    float.TryParse(skinUrls[partId], out HookLTiling);
+                    continue;
+                }
+                else if (partId == (int)HumanCustomSkinPartId.HookRTiling && skinUrls.Length > partId)
+                {
+                    float.TryParse(skinUrls[partId], out HookRTiling);
+                    continue;
+                }
+                else if (partId == (int)HumanCustomSkinPartId.HookL && !SettingsManager.CustomSkinSettings.Human.HookEnabled.Value)
+                    continue;
+                else if (partId == (int)HumanCustomSkinPartId.HookR && !SettingsManager.CustomSkinSettings.Human.HookEnabled.Value)
+                    continue;
                 BaseCustomSkinPart part = GetCustomSkinPart(partId);
-                if (!part.LoadCache(skinUrls[partId]))
+                if (skinUrls.Length > partId && !part.LoadCache(skinUrls[partId]))
+                {
                     yield return StartCoroutine(part.LoadSkin(skinUrls[partId]));
+                }
+                if (partId == (int)HumanCustomSkinPartId.HookL)
+                    HookL = (HookCustomSkinPart)part;
+                else if (partId == (int)HumanCustomSkinPartId.HookR)
+                    HookR = (HookCustomSkinPart)part;
             }
             FengGameManagerMKII.instance.unloadAssets();
         }
@@ -58,14 +83,17 @@ namespace CustomSkins
                     AddRendererIfExists(renderers, hero.setup.part_hand_l);
                     AddRendererIfExists(renderers, hero.setup.part_hand_r);
                     AddRendererIfExists(renderers, hero.setup.part_head);
+                    AddRendererIfExists(renderers, hero.setup.part_chest);
                     return new BaseCustomSkinPart(this, renderers, GetRendererId(partId), MaxSizeMedium);
                 case HumanCustomSkinPartId.Costume:
-                    AddRendererIfExists(renderers, hero.setup.part_chest_3);
-                    AddRendererIfExists(renderers, hero.setup.part_upper_body);
                     AddRendererIfExists(renderers, hero.setup.part_arm_l);
                     AddRendererIfExists(renderers, hero.setup.part_arm_r);
                     AddRendererIfExists(renderers, hero.setup.part_leg);
-                    return new BaseCustomSkinPart(this, renderers, GetRendererId(partId), MaxSizeLarge);
+                    AddRendererIfExists(renderers, hero.setup.part_chest_2);
+                    AddRendererIfExists(renderers, hero.setup.part_chest_3);
+                    AddRendererIfExists(renderers, hero.setup.part_upper_body);
+                    // disabling costume renderers causes animation glitches, so we use transparent material instead
+                    return new BaseCustomSkinPart(this, renderers, GetRendererId(partId), MaxSizeLarge, useTransparentMaterial: true);
                 case HumanCustomSkinPartId.Logo:
                     AddRendererIfExists(renderers, hero.setup.part_cape);
                     AddRendererIfExists(renderers, hero.setup.part_brand_1);
@@ -80,8 +108,6 @@ namespace CustomSkins
                     AddRendererIfExists(renderers, hero.setup.part_blade_l);
                     return new BaseCustomSkinPart(this, renderers, GetRendererId(partId), MaxSizeMedium);
                 case HumanCustomSkinPartId.GearR:
-                    AddRendererIfExists(renderers, hero.setup.part_3dmg);
-                    AddRendererIfExists(renderers, hero.setup.part_3dmg_belt);
                     AddRendererIfExists(renderers, hero.setup.part_3dmg_gas_r);
                     AddRendererIfExists(renderers, hero.setup.part_blade_r);
                     return new BaseCustomSkinPart(this, renderers, GetRendererId(partId), MaxSizeMedium);
@@ -89,7 +115,7 @@ namespace CustomSkins
                     AddRendererIfExists(renderers, hero.transform.Find("3dmg_smoke").gameObject);
                     return new BaseCustomSkinPart(this, renderers, GetRendererId(partId), MaxSizeSmall);
                 case HumanCustomSkinPartId.Hoodie:
-                    if (hero.setup.part_chest_1 != null && hero.setup.part_chest_1.name.Contains("character_cap_casual"))
+                    if (hero.setup.part_chest_1 != null && hero.setup.part_chest_1.name.Contains("character_cap"))
                         AddRendererIfExists(renderers, hero.setup.part_chest_1);
                     return new BaseCustomSkinPart(this, renderers, GetRendererId(partId), MaxSizeSmall);
                 case HumanCustomSkinPartId.WeaponTrail:
@@ -107,6 +133,9 @@ namespace CustomSkins
                     if (hero.ThunderSpearRModel != null)
                         AddRendererIfExists(renderers, hero.ThunderSpearRModel);
                     return new BaseCustomSkinPart(this, renderers, GetRendererId(partId), MaxSizeMedium);
+                case HumanCustomSkinPartId.HookL:
+                case HumanCustomSkinPartId.HookR:
+                    return new HookCustomSkinPart(this, GetRendererId(partId), MaxSizeSmall);
                 default:
                     return null;
             }
@@ -129,6 +158,10 @@ namespace CustomSkins
         Hoodie,
         WeaponTrail,
         ThunderspearL,
-        ThunderspearR
+        ThunderspearR,
+        HookL,
+        HookLTiling,
+        HookR,
+        HookRTiling
     }
 }

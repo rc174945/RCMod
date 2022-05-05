@@ -184,7 +184,7 @@ public class TITAN_CONTROLLER : MonoBehaviour
             {
                 this.isJumpDown = true;
             }
-            if (SettingsManager.InputSettings.General.Restart.GetKey())
+            if (SettingsManager.InputSettings.General.ChangeCharacter.GetKey())
             {
                 this.isSuicide = true;
             }

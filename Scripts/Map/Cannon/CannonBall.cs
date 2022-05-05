@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Settings;
 
-public class CannonBall : Photon.MonoBehaviour
+class CannonBall : Photon.MonoBehaviour
 {
     private Vector3 correctPos;
     private Vector3 correctVelocity;

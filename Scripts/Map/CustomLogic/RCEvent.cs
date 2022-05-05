@@ -6,7 +6,7 @@
 using System;
 using System.Collections.Generic;
 
-public class RCEvent
+class RCEvent
 {
     private RCCondition condition;
     private RCAction elseAction;

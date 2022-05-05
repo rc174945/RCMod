@@ -6,10 +6,10 @@ namespace Settings
 {
     class CityCustomSkinSet: BaseSetSetting
     {
-        public ListSetting<StringSetting> Houses = new ListSetting<StringSetting>(new StringSetting(string.Empty), 8);
-        public StringSetting Ground = new StringSetting(string.Empty);
-        public StringSetting Wall = new StringSetting(string.Empty);
-        public StringSetting Gate = new StringSetting(string.Empty);
+        public ListSetting<StringSetting> Houses = new ListSetting<StringSetting>(new StringSetting(string.Empty, maxLength: 200), 8);
+        public StringSetting Ground = new StringSetting(string.Empty, maxLength: 200);
+        public StringSetting Wall = new StringSetting(string.Empty, maxLength: 200);
+        public StringSetting Gate = new StringSetting(string.Empty, maxLength: 200);
 
         protected override bool Validate()
         {

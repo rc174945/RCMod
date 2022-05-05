@@ -7,7 +7,7 @@ using UnityEngine;
 using Settings;
 using GameProgress;
 
-public class Bomb : Photon.MonoBehaviour
+class Bomb : Photon.MonoBehaviour
 {
     private Vector3 correctPlayerPos = Vector3.zero;
     private Quaternion correctPlayerRot = Quaternion.identity;

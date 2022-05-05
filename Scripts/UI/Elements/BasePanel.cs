@@ -1,6 +1,7 @@
 ﻿using ApplicationManagers;
 using Settings;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
@@ -39,6 +40,8 @@ namespace UI
         {
             if (transform.Find("Border") != null)
                 transform.Find("Border").GetComponent<CanvasGroup>().blocksRaycasts = false;
+            if (_currentCategoryPanel != null)
+                _currentCategoryPanel.SetActive(true);
         }
 
         public virtual void Setup(BasePanel parent = null)
@@ -135,7 +138,15 @@ namespace UI
             Type t = _categoryPanelTypes[name];
             _currentCategoryPanelName.Value = name;
             _currentCategoryPanel = ElementFactory.CreateDefaultPanel(transform, t, enabled: true);
+            _currentCategoryPanel.SetActive(false);
+            StartCoroutine(WaitAndEnableCategoryPanel());
             UIManager.SetLastCategory(GetType(), name);
+        }
+
+        private IEnumerator WaitAndEnableCategoryPanel()
+        {
+            yield return new WaitForEndOfFrame();
+            _currentCategoryPanel.SetActive(true);
         }
 
         public string GetCurrentCategoryName()

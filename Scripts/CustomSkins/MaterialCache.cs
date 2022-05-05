@@ -6,6 +6,16 @@ namespace CustomSkins
     class MaterialCache
     {
         private static Dictionary<string, Material> _IdToMaterial = new Dictionary<string, Material>();
+        public static Material TransparentMaterial;
+
+        public static void Init()
+        {
+            TransparentMaterial = new Material(Shader.Find("Transparent/Diffuse"));
+            Texture2D transparentTexture = new Texture2D(1, 1, TextureFormat.ARGB32, false);
+            transparentTexture.SetPixel(0, 0, new Color(0f, 0f, 0f, 0f));
+            transparentTexture.Apply();
+            TransparentMaterial.mainTexture = transparentTexture;
+        }
 
         public static void Clear()
         {

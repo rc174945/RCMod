@@ -13,7 +13,7 @@ using UI;
 using Weather;
 using GameManagers;
 
-public class FengGameManagerMKII : Photon.MonoBehaviour
+class FengGameManagerMKII : Photon.MonoBehaviour
 {
     public static bool JustLeftRoom = false;
     public Dictionary<int, CannonValues> allowedToCannon;
@@ -338,6 +338,26 @@ public class FengGameManagerMKII : Photon.MonoBehaviour
         {
             hashtable.Add("bomb", 1);
         }
+        if (settings.BombModeCeiling.Value)
+        {
+            hashtable.Add("bombCeiling", 1);
+        }
+        else
+        {
+            hashtable.Add("bombCeiling", 0);
+        }
+        if (settings.BombModeInfiniteGas.Value)
+        {
+            hashtable.Add("bombInfiniteGas", 1);
+        }
+        else
+        {
+            hashtable.Add("bombInfiniteGas", 0);
+        }
+        if (settings.GlobalHideNames.Value)
+        {
+            hashtable.Add("globalHideNames", 1);
+        }
         if (settings.GlobalMinimapDisable.Value)
         {
             hashtable.Add("globalDisableMinimap", 1);
@@ -465,6 +485,7 @@ public class FengGameManagerMKII : Photon.MonoBehaviour
         {
             hashtable.Add("asoracing", 1);
         }
+        hashtable.Add("racingStartTime", settings.RacingStartTime.Value);
         LegacyGameSettings legacySettings = SettingsManager.LegacyGameSettings;
         legacySettings.PreserveKDR.Value = settings.PreserveKDR.Value;
         legacySettings.TitanSpawnCap.Value = settings.TitanSpawnCap.Value;
@@ -954,11 +975,11 @@ public class FengGameManagerMKII : Photon.MonoBehaviour
                     {
                         if (IN_GAME_MAIN_CAMERA.gamemode == GAMEMODE.SURVIVE_MODE)
                         {
-                            this.ShowHUDInfoCenter(string.Concat(new object[] { "Survive ", this.wave, " Waves!\n Press ", SettingsManager.InputSettings.General.Restart.ToString(), " to Restart.\n\n\n" }));
+                            this.ShowHUDInfoCenter(string.Concat(new object[] { "Survive ", this.wave, " Waves!\n Press ", SettingsManager.InputSettings.General.RestartGame.ToString(), " to Restart.\n\n\n" }));
                         }
                         else
                         {
-                            this.ShowHUDInfoCenter("Humanity Fail!\n Press " + SettingsManager.InputSettings.General.Restart.ToString() + " to Restart.\n\n\n");
+                            this.ShowHUDInfoCenter("Humanity Fail!\n Press " + SettingsManager.InputSettings.General.RestartGame.ToString() + " to Restart.\n\n\n");
                         }
                     }
                     else
@@ -993,15 +1014,15 @@ public class FengGameManagerMKII : Photon.MonoBehaviour
                         if (IN_GAME_MAIN_CAMERA.gamemode == GAMEMODE.RACING)
                         {
                             num3 = (((int) (this.timeTotalServer * 10f)) * 0.1f) - 5f;
-                            this.ShowHUDInfoCenter(num3.ToString() + "s !\n Press " + SettingsManager.InputSettings.General.Restart.ToString() + " to Restart.\n\n\n");
+                            this.ShowHUDInfoCenter(num3.ToString() + "s !\n Press " + SettingsManager.InputSettings.General.RestartGame.ToString() + " to Restart.\n\n\n");
                         }
                         else if (IN_GAME_MAIN_CAMERA.gamemode == GAMEMODE.SURVIVE_MODE)
                         {
-                            this.ShowHUDInfoCenter("Survive All Waves!\n Press " + SettingsManager.InputSettings.General.Restart.ToString() + " to Restart.\n\n\n");
+                            this.ShowHUDInfoCenter("Survive All Waves!\n Press " + SettingsManager.InputSettings.General.RestartGame.ToString() + " to Restart.\n\n\n");
                         }
                         else
                         {
-                            this.ShowHUDInfoCenter("Humanity Win!\n Press " + SettingsManager.InputSettings.General.Restart.ToString() + " to Restart.\n\n\n");
+                            this.ShowHUDInfoCenter("Humanity Win!\n Press " + SettingsManager.InputSettings.General.RestartGame.ToString() + " to Restart.\n\n\n");
                         }
                     }
                     else
@@ -1086,10 +1107,11 @@ public class FengGameManagerMKII : Photon.MonoBehaviour
                     }
                     else
                     {
-                        this.ShowHUDInfoTopCenter("Time : " + ((this.roundTime >= 20f) ? (this.roundTime - 20f).ToString("0.00") : "WAITING"));
-                        if (this.roundTime < 20f)
+                        float startTime = SettingsManager.LegacyGameSettings.RacingStartTime.Value;
+                        this.ShowHUDInfoTopCenter("Time : " + ((this.roundTime >= startTime) ? (this.roundTime - startTime).ToString("0.00") : "WAITING"));
+                        if (this.roundTime < startTime)
                         {
-                            this.ShowHUDInfoCenter("RACE START IN " + (20f - this.roundTime).ToString("0.00") + (!(this.localRacingResult == string.Empty) ? ("\nLast Round\n" + this.localRacingResult) : "\n\n"));
+                            this.ShowHUDInfoCenter("RACE START IN " + (startTime - this.roundTime).ToString("0.00") + (!(this.localRacingResult == string.Empty) ? ("\nLast Round\n" + this.localRacingResult) : "\n\n"));
                         }
                         else if (!this.startRacing)
                         {
@@ -3560,7 +3582,7 @@ public class FengGameManagerMKII : Photon.MonoBehaviour
 
     public void multiplayerRacingFinsih()
     {
-        float time = this.roundTime - 20f;
+        float time = this.roundTime - SettingsManager.LegacyGameSettings.RacingStartTime.Value;
         if (PhotonNetwork.isMasterClient)
         {
             this.getRacingResult(LoginFengKAI.player.name, time, null);
@@ -5141,7 +5163,6 @@ public class FengGameManagerMKII : Photon.MonoBehaviour
         {
             ServerRequestAuthentication(PrivateServerAuthPass);
         }
-        MapCeiling.CreateMapCeiling();
     }
 
     public void OnLeftLobby()
@@ -5359,7 +5380,6 @@ public class FengGameManagerMKII : Photon.MonoBehaviour
                 }
             }
         }
-        MapCeiling.CreateMapCeiling();
         unloadAssets(immediate: true);
     }
 
@@ -5491,6 +5511,26 @@ public class FengGameManagerMKII : Photon.MonoBehaviour
                 {
                     hashtable.Add("bomb", 1);
                 }
+                if (SettingsManager.LegacyGameSettings.BombModeCeiling.Value)
+                {
+                    hashtable.Add("bombCeiling", 1);
+                }
+                else
+                {
+                    hashtable.Add("bombCeiling", 0);
+                }
+                if (SettingsManager.LegacyGameSettings.BombModeInfiniteGas.Value)
+                {
+                    hashtable.Add("bombInfiniteGas", 1);
+                }
+                else
+                {
+                    hashtable.Add("bombInfiniteGas", 0);
+                }
+                if (SettingsManager.LegacyGameSettings.GlobalHideNames.Value)
+                {
+                    hashtable.Add("globalHideNames", 1);
+                }
                 if (SettingsManager.LegacyGameSettings.GlobalMinimapDisable.Value)
                 {
                     hashtable.Add("globalDisableMinimap", 1);
@@ -5593,6 +5633,7 @@ public class FengGameManagerMKII : Photon.MonoBehaviour
                 {
                     hashtable.Add("asoracing", 1);
                 }
+                hashtable.Add("racingStartTime", SettingsManager.LegacyGameSettings.RacingStartTime.Value);
                 if ((ignoreList != null) && (ignoreList.Count > 0))
                 {
                     photonView.RPC("ignorePlayerArray", player, new object[] { ignoreList.ToArray() });
@@ -7418,6 +7459,32 @@ public class FengGameManagerMKII : Photon.MonoBehaviour
                 this.restartingBomb = true;
             }
         }
+        if (settings.BombModeEnabled.Value && (!hash.ContainsKey("bombCeiling") || (int)hash["bombCeiling"] == 1))
+        {
+            MapCeiling.CreateMapCeiling();
+        }
+        if (!hash.ContainsKey("bombInfiniteGas") || (int)hash["bombInfiniteGas"] == 1)
+        {
+            settings.BombModeInfiniteGas.Value = true;
+        }
+        else
+        {
+            settings.BombModeInfiniteGas.Value = false;
+        }
+        settings.GlobalHideNames.Value = hash.ContainsKey("globalHideNames");
+        if (hash.ContainsKey("globalDisableMinimap"))
+        {
+            if (!settings.GlobalMinimapDisable.Value)
+            {
+                settings.GlobalMinimapDisable.Value = true;
+                this.chatRoom.addLINE("<color=#FFCC00>Minimaps are not allowed.</color>");
+            }
+        }
+        else if (settings.GlobalMinimapDisable.Value)
+        {
+            settings.GlobalMinimapDisable.Value = false;
+            this.chatRoom.addLINE("<color=#FFCC00>Minimaps are allowed.</color>");
+        }
         if (hash.ContainsKey("globalDisableMinimap"))
         {
             if (!settings.GlobalMinimapDisable.Value)
@@ -7785,6 +7852,17 @@ public class FengGameManagerMKII : Photon.MonoBehaviour
         {
             settings.RacingEndless.Value = false;
             this.chatRoom.addLINE("<color=#FFCC00>Racing will restart on win.</color>");
+        }
+        if (hash.ContainsKey("racingStartTime"))
+        {
+            settings.RacingStartTime.Value = (float)hash["racingStartTime"];
+        }
+        else
+            settings.RacingStartTime.Value = 20f;
+        foreach (HERO hero in heroes)
+        {
+            if (hero != null)
+                hero.SetName();
         }
     }
 

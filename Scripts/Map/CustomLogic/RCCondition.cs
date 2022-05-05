@@ -4,8 +4,7 @@
 
 
 using System;
-
-public class RCCondition
+class RCCondition
 {
     private int operand;
     private RCActionHelper parameter1;

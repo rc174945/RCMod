@@ -21,9 +21,11 @@ namespace UI
             skinsPanel.CreateCommonSettings(DoublePanelLeft, DoublePanelRight);
             ElementFactory.CreateToggleSetting(DoublePanelRight, new ElementStyle(titleWidth: 200f, themePanel: ThemePanel), settings.GasEnabled,
                            UIManager.GetLocale(settingsPopup.LocaleCategory, "Skins.Human", "GasEnabled"));
+            ElementFactory.CreateToggleSetting(DoublePanelRight, new ElementStyle(titleWidth: 200f, themePanel: ThemePanel), settings.HookEnabled,
+                          UIManager.GetLocale(settingsPopup.LocaleCategory, "Skins.Human", "HookEnabled"));
             CreateHorizontalDivider(DoublePanelLeft);
             CreateHorizontalDivider(DoublePanelRight);
-            skinsPanel.CreateSkinStringSettings(DoublePanelLeft, DoublePanelRight, titleWidth: 200f, elementWidth: 200f, leftCount: 7);
+            skinsPanel.CreateSkinStringSettings(DoublePanelLeft, DoublePanelRight, titleWidth: 200f, elementWidth: 200f, leftCount: 9);
         }
     }
 }

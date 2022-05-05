@@ -46,7 +46,7 @@ namespace UI
                 return SettingType.Int;
             if (t == typeof(FloatSetting))
                 return SettingType.Float;
-            if (t == typeof(StringSetting))
+            if (t == typeof(StringSetting) || t == typeof(NameSetting))
                 return SettingType.String;
             if (t == typeof(BoolSetting))
                 return SettingType.Bool;

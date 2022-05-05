@@ -31,7 +31,7 @@ namespace UI
                UIManager.GetLocaleArray(cat, sub, "WeatherEffectsOptions"), elementWidth: 200f);
             ElementFactory.CreateDropdownSetting(DoublePanelRight, style, settings.AntiAliasing, UIManager.GetLocale(cat, sub, "AntiAliasing"),
                UIManager.GetLocaleArray(cat, sub, "AntiAliasingOptions"), elementWidth: 200f);
-            ElementFactory.CreateSliderSetting(DoublePanelRight, style, settings.RenderDistance, UIManager.GetLocale(cat, sub, "RenderDistance"), elementWidth: 130f);
+            ElementFactory.CreateInputSetting(DoublePanelRight, style, settings.RenderDistance, UIManager.GetLocale(cat, sub, "RenderDistance"), elementWidth: 100f, tooltip: UIManager.GetLocale(cat, sub, "RenderDistanceTooltip"));
             ElementFactory.CreateToggleSetting(DoublePanelRight, style, settings.AnimatedIntro, UIManager.GetLocale(cat, sub, "AnimatedIntro"));
             ElementFactory.CreateToggleSetting(DoublePanelRight, style, settings.WindEffectEnabled, UIManager.GetLocale(cat, sub, "WindEffectEnabled"));
             ElementFactory.CreateToggleSetting(DoublePanelRight, style, settings.WeaponTrailEnabled, UIManager.GetLocale(cat, sub, "WeaponTrailEnabled"));

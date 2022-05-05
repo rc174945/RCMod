@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections;
 using Utility;
 using Settings;
+using ApplicationManagers;
 
 namespace CustomSkins
 {
@@ -15,8 +16,10 @@ namespace CustomSkins
         protected int _maxSize;
         protected Vector2 _textureScale;
         protected readonly Vector2 _defaultTextureScale = new Vector2(1f, 1f);
+        protected bool _useTransparentMaterial;
 
-        public BaseCustomSkinPart(BaseCustomSkinLoader loader, List<Renderer> renderers, string rendererId, int maxSize, Vector2? textureScale = null)
+        public BaseCustomSkinPart(BaseCustomSkinLoader loader, List<Renderer> renderers, string rendererId, int maxSize, Vector2? textureScale = null,
+            bool useTransparentMaterial = false)
         {
             _loader = loader;
             _renderers = renderers;
@@ -26,6 +29,7 @@ namespace CustomSkins
                 _textureScale = _defaultTextureScale;
             else
                 _textureScale = textureScale.Value;
+            _useTransparentMaterial = useTransparentMaterial;
         }
         
         // starting child coroutines skips a frame which causes skin loading delay for cached textures, 
@@ -55,11 +59,11 @@ namespace CustomSkins
             if (!TextureDownloader.ValidTextureURL(url))
                 yield break;
             bool mipmap = SettingsManager.GraphicsSettings.MipmapEnabled.Value;
-            CoroutineWithData cwd = new CoroutineWithData(_loader, TextureDownloader.DownloadTexture(url, mipmap, _maxSize));
-            yield return cwd.coroutine;
+            CoroutineWithData cwd = new CoroutineWithData(_loader, TextureDownloader.DownloadTexture(_loader, url, mipmap, _maxSize));
+            yield return cwd.Coroutine;
             if (IsValidPart())
             {
-                Material newMaterial = SetNewTexture((Texture2D)cwd.result);
+                Material newMaterial = SetNewTexture((Texture2D)cwd.Result);
                 MaterialCache.SetMaterial(_rendererId, url, newMaterial);
             }
         }
@@ -71,14 +75,21 @@ namespace CustomSkins
 
         protected virtual void DisableRenderers()
         {
-            foreach (Renderer renderer in _renderers)
-                renderer.enabled = false;
+            if (_useTransparentMaterial)
+                SetMaterial(MaterialCache.TransparentMaterial);
+            else
+            {
+                foreach (Renderer renderer in _renderers)
+                    renderer.enabled = false;
+            }
         }
 
         protected virtual void SetMaterial(Material material)
         {
             foreach (Renderer renderer in _renderers)
+            {
                 renderer.material = material;
+            }
         }
 
         protected virtual Material SetNewTexture(Texture2D texture)
@@ -93,6 +104,5 @@ namespace CustomSkins
             SetMaterial(_renderers[0].material);
             return _renderers[0].material;
         }
-
     }
 }

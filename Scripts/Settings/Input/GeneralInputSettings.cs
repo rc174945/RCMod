@@ -10,7 +10,8 @@ namespace Settings
         public KeybindSetting Left = new KeybindSetting(new string[] { "A", "None" });
         public KeybindSetting Right = new KeybindSetting(new string[] { "D", "None" });
         public KeybindSetting Pause = new KeybindSetting(new string[] { "P", "None" });
-        public KeybindSetting Restart = new KeybindSetting(new string[] { "T", "None" });
+        public KeybindSetting ChangeCharacter = new KeybindSetting(new string[] { "T", "None" });
+        public KeybindSetting RestartGame = new KeybindSetting(new string[] { "F5", "None" });
         public KeybindSetting Chat = new KeybindSetting(new string[] { "Return", "None" });
         public KeybindSetting ToggleFullscreen = new KeybindSetting(new string[] { "Backspace", "None" });
         public KeybindSetting ChangeCamera = new KeybindSetting(new string[] { "C", "None" });

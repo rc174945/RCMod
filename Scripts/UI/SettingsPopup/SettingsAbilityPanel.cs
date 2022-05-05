@@ -19,16 +19,16 @@ namespace UI
             ElementFactory.CreateToggleSetting(DoublePanelRight, style, settings.ShowBombColors, "Show bomb colors");
             ElementFactory.CreateToggleSetting(DoublePanelRight, style, settings.UseOldEffect, "Use old effect");
             _pointsLeftLabel = ElementFactory.CreateDefaultLabel(DoublePanelLeft, style, "Points Left").GetComponent<Text>();
-            ElementFactory.CreateIncrementSetting(DoublePanelLeft, style, settings.BombRadius, "Bomb radius", onValueChanged: () => OnStatChanged(settings.BombRadius));
-            ElementFactory.CreateIncrementSetting(DoublePanelLeft, style, settings.BombRange, "Bomb range", onValueChanged: () => OnStatChanged(settings.BombRange));
-            ElementFactory.CreateIncrementSetting(DoublePanelLeft, style, settings.BombSpeed, "Bomb speed", onValueChanged: () => OnStatChanged(settings.BombSpeed));
-            ElementFactory.CreateIncrementSetting(DoublePanelLeft, style, settings.BombCooldown, "Bomb cooldown", onValueChanged: () => OnStatChanged(settings.BombCooldown));
+            ElementFactory.CreateIncrementSetting(DoublePanelLeft, style, settings.BombRadius, "Bomb radius (0-10)", onValueChanged: () => OnStatChanged(settings.BombRadius));
+            ElementFactory.CreateIncrementSetting(DoublePanelLeft, style, settings.BombRange, "Bomb range (0-3)", onValueChanged: () => OnStatChanged(settings.BombRange));
+            ElementFactory.CreateIncrementSetting(DoublePanelLeft, style, settings.BombSpeed, "Bomb speed (0-10)", onValueChanged: () => OnStatChanged(settings.BombSpeed));
+            ElementFactory.CreateIncrementSetting(DoublePanelLeft, style, settings.BombCooldown, "Bomb cooldown (0-6)", onValueChanged: () => OnStatChanged(settings.BombCooldown));
             OnStatChanged(settings.BombRadius);
         }
 
         protected void OnStatChanged(IntSetting setting)
         {
-            int maxPoints = 20;
+            int maxPoints = 16;
             AbilitySettings settings = SettingsManager.AbilitySettings;
             int currentTotal = settings.BombRadius.Value + settings.BombRange.Value + settings.BombSpeed.Value + settings.BombCooldown.Value;
             if (currentTotal > maxPoints)

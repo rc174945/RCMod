@@ -1,4 +1,5 @@
 using Settings;
+using System.Collections;
 using UnityEngine;
 
 public static class Util
@@ -19,5 +20,16 @@ public static class Util
         if (flat)
             v.y = 0f;
         return v.normalized;
+    }
+
+    public static void DebugTimeSince(float start, string prefix = "")
+    {
+        Debug.Log(prefix + ": " + (Time.realtimeSinceStartup - start).ToString());
+    }
+
+    public static IEnumerator WaitForFrames(int frames)
+    {
+        for (int i = 0; i < frames; i++)
+            yield return new WaitForEndOfFrame();
     }
 }

@@ -3,7 +3,7 @@ using Settings;
 using System;
 using UnityEngine;
 
-public class Cannon : Photon.MonoBehaviour
+class Cannon : Photon.MonoBehaviour
 {
     public Transform ballPoint;
     public Transform barrel;

@@ -111,7 +111,7 @@ namespace UI
                 BaseSetting setting = (BaseSetting)entry.Value;
                 string name = (string)entry.Key;
                 Transform side = count <= leftCount ? panelLeft : panelRight;
-                if (setting.GetType() == typeof(StringSetting) && name != "Name")
+                if ((setting.GetType() == typeof(StringSetting) || setting.GetType() == typeof(FloatSetting)) && name != "Name")
                 {
                     string currentSub = sub;
                     if (name == "Ground")

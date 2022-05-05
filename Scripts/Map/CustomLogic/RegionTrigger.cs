@@ -6,7 +6,7 @@
 using System;
 using UnityEngine;
 
-public class RegionTrigger : MonoBehaviour
+class RegionTrigger : MonoBehaviour
 {
     public string myName;
     public RCEvent playerEventEnter;

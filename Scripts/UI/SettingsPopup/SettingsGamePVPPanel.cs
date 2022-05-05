@@ -26,7 +26,10 @@ namespace UI
             ElementFactory.CreateInputSetting(DoublePanelLeft, style, settings.PointModeAmount, "Point amount", elementWidth: inputWidth);
             CreateHorizontalDivider(DoublePanelLeft);
             ElementFactory.CreateToggleSetting(DoublePanelLeft, style, settings.BombModeEnabled, "Bomb mode");
-            ElementFactory.CreateToggleGroupSetting(DoublePanelLeft, style, settings.TeamMode, "Team mode", new string[] { "Off", "No sort", "Size lock", "Skill lock" });
+            ElementFactory.CreateToggleSetting(DoublePanelLeft, style, settings.BombModeCeiling, "Bomb ceiling");
+            ElementFactory.CreateToggleSetting(DoublePanelLeft, style, settings.BombModeInfiniteGas, "Bomb infinite gas");
+            ElementFactory.CreateToggleSetting(DoublePanelLeft, style, settings.BombModeDisableTitans, "Bomb disable titans");
+            ElementFactory.CreateToggleGroupSetting(DoublePanelRight, style, settings.TeamMode, "Team mode", new string[] { "Off", "No sort", "Size lock", "Skill lock" });
             ElementFactory.CreateToggleSetting(DoublePanelRight, style, settings.InfectionModeEnabled, "Infection mode");
             ElementFactory.CreateInputSetting(DoublePanelRight, style, settings.InfectionModeAmount, "Starting titans", elementWidth: inputWidth);
             CreateHorizontalDivider(DoublePanelRight);

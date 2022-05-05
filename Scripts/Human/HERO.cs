@@ -11,7 +11,7 @@ using Constants;
 using Weather;
 using GameProgress;
 
-public class HERO : Photon.MonoBehaviour
+class HERO : Photon.MonoBehaviour
 {
     private HERO_STATE _state;
     private bool almostSingleHook;
@@ -183,10 +183,11 @@ public class HERO : Photon.MonoBehaviour
     public GameObject ThunderSpearRModel;
     bool _hasRunStart;
     bool _needSetupThunderspears;
-    HumanCustomSkinLoader _customSkinLoader;
+    public HumanCustomSkinLoader _customSkinLoader;
     private bool _cancelGasDisable = false;
     private float _currentEmoteActionTime = 0f;
     public float _flareDelayAfterEmote = 0f;
+    private float _dashCooldownLeft = 0f;
 
     public bool IsMine()
     {
@@ -469,13 +470,15 @@ public class HERO : Photon.MonoBehaviour
             int cd = SettingsManager.AbilitySettings.BombCooldown.Value;
             int speed = SettingsManager.AbilitySettings.BombSpeed.Value;
             int range = SettingsManager.AbilitySettings.BombRange.Value;
-            if (radius + cd + speed + range > 20)
+            if (radius + cd + speed + range > 16)
             {
-                radius = cd = speed = range = 5;
+                radius = speed = 6;
+                range = 3;
+                cd = 1;
             }
             this.bombTimeMax = ((range * 60f) + 200f) / ((speed * 60f) + 200f);
             this.bombRadius = (radius * 4f) + 20f;
-            this.bombCD = (cd * -0.4f) + 5f;
+            this.bombCD = ((cd + 4) * -0.4f) + 5f;
             this.bombSpeed = (speed * 60f) + 200f;
             ExitGames.Client.Photon.Hashtable propertiesToSet = new ExitGames.Client.Photon.Hashtable();
             propertiesToSet.Add(PhotonPlayerProperty.RCBombR, SettingsManager.AbilitySettings.BombColor.Value.r);
@@ -982,7 +985,7 @@ public class HERO : Photon.MonoBehaviour
 
     private void dash(float horizontal, float vertical)
     {
-        if (((this.dashTime <= 0f) && (this.currentGas > 0f)) && !this.isMounted)
+        if (((this.dashTime <= 0f) && (this.currentGas > 0f)) && !this.isMounted && _dashCooldownLeft <= 0f && _state != HERO_STATE.Salute)
         {
             this.useGas(this.totalGas * 0.04f);
             this.facingDirection = this.getGlobalFacingDirection(horizontal, vertical);
@@ -1005,6 +1008,7 @@ public class HERO : Photon.MonoBehaviour
             this.state = HERO_STATE.AirDodge;
             this.falseAttack();
             base.rigidbody.AddForce((Vector3) (this.dashV * 40f), ForceMode.VelocityChange);
+            _dashCooldownLeft = 0.2f;
         }
     }
 
@@ -2487,7 +2491,8 @@ public class HERO : Photon.MonoBehaviour
                 HumanCustomSkinSet set = (HumanCustomSkinSet)SettingsManager.CustomSkinSettings.Human.GetSelectedSet();
                 string url = string.Join(",", new string[] { set.Horse.Value, set.Hair.Value, set.Eye.Value, set.Glass.Value, set.Face.Value,
                 set.Skin.Value, set.Costume.Value, set.Logo.Value, set.GearL.Value, set.GearR.Value, set.Gas.Value, set.Hoodie.Value, 
-                    set.WeaponTrail.Value, set.ThunderSpearL.Value, set.ThunderSpearR.Value});
+                    set.WeaponTrail.Value, set.ThunderSpearL.Value, set.ThunderSpearR.Value, set.HookL.Value, set.HookLTiling.Value.ToString(),
+                set.HookR.Value, set.HookRTiling.Value.ToString()});
                 if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
                 {
                     base.StartCoroutine(this.loadskinE(-1, url));
@@ -2509,7 +2514,7 @@ public class HERO : Photon.MonoBehaviour
     {
         while (!_hasRunStart)
             yield return null;
-        yield return StartCoroutine(_customSkinLoader.LoadSkinsFromRPC(new object[] { horse, url }));
+        _customSkinLoader.StartCoroutine(_customSkinLoader.LoadSkinsFromRPC(new object[] { horse, url }));
     }
 
     [RPC]
@@ -2518,7 +2523,7 @@ public class HERO : Photon.MonoBehaviour
         if (info.sender != photonView.owner)
             return;
         HumanCustomSkinSettings settings = SettingsManager.CustomSkinSettings.Human;
-        if (settings.SkinsEnabled.Value  && (!settings.SkinsLocal.Value || photonView.isMine))
+        if (settings.SkinsEnabled.Value && (!settings.SkinsLocal.Value || photonView.isMine))
         {
             StartCoroutine(this.loadskinE(horse, url));
         }
@@ -4251,6 +4256,28 @@ public class HERO : Photon.MonoBehaviour
         if (_needSetupThunderspears)
             CreateAndAttachThunderSpears();
         _hasRunStart = true;
+        SetName();
+    }
+
+    public void SetName()
+    {
+        if (myNetWorkName == null || myNetWorkName.GetComponent<UILabel>() == null)
+            return;
+        if (SettingsManager.UISettings.DisableNameColors.Value)
+            ForceWhiteName();
+        if (SettingsManager.LegacyGameSettings.GlobalHideNames.Value || SettingsManager.UISettings.HideNames.Value)
+            HideName();
+    }
+
+    public void HideName()
+    {
+        this.myNetWorkName.GetComponent<UILabel>().text = string.Empty;
+    }
+
+    public void ForceWhiteName()
+    {
+        UILabel label = this.myNetWorkName.GetComponent<UILabel>();
+        label.text = label.text.StripHex();
     }
 
     public void SetInterpolationIfEnabled(bool interpolate)
@@ -4353,6 +4380,9 @@ public class HERO : Photon.MonoBehaviour
                 if ((IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE) || base.photonView.isMine)
                 {
                     UpdateInput();
+                    _dashCooldownLeft -= Time.deltaTime;
+                    if (_dashCooldownLeft < 0f)
+                        _dashCooldownLeft = 0f;
                     if (this.myCannonRegion != null)
                     {
                         FengGameManagerMKII.instance.ShowHUDInfoCenter(string.Format("Press {0} to use Cannon.", SettingsManager.InputSettings.Interaction.Interact.ToString()));
@@ -4511,7 +4541,7 @@ public class HERO : Photon.MonoBehaviour
                                     this.shootFlare(3);
                                 }
                             }
-                            if (SettingsManager.InputSettings.General.Restart.GetKeyDown())
+                            if (SettingsManager.InputSettings.General.ChangeCharacter.GetKeyDown())
                             {
                                 this.suicide2();
                             }
@@ -5606,6 +5636,8 @@ public class HERO : Photon.MonoBehaviour
 
     private void useGas(float amount = 0)
     {
+        if (SettingsManager.LegacyGameSettings.BombModeEnabled.Value && SettingsManager.LegacyGameSettings.BombModeInfiniteGas.Value)
+            return;
         if (amount == 0f)
         {
             amount = this.useGasSpeed;

@@ -7,7 +7,7 @@ namespace Settings
     class UISettings: SaveableSettingsContainer
     {
         protected override string FileName { get { return "UI.json"; } }
-        public StringSetting Theme = new StringSetting("Light");
+        public StringSetting UITheme = new StringSetting("Dark");
         public BoolSetting GameFeed = new BoolSetting(false);
         public FloatSetting UIMasterScale = new FloatSetting(1f, minValue: 0.75f, maxValue: 1.5f);
         public FloatSetting CrosshairScale = new FloatSetting(1f, minValue: 0f, maxValue: 3f);
@@ -17,6 +17,8 @@ namespace Settings
         public IntSetting Speedometer = new IntSetting((int)SpeedometerType.Off);
         public BoolSetting ShowInterpolation = new BoolSetting(false);
         public BoolSetting ShowEmotes = new BoolSetting(true);
+        public BoolSetting HideNames = new BoolSetting(false);
+        public BoolSetting DisableNameColors = new BoolSetting(false);
         public IntSetting ChatLines = new IntSetting(15);
         public IntSetting ChatWidth = new IntSetting(150);
         public IntSetting ChatHeight = new IntSetting(100);

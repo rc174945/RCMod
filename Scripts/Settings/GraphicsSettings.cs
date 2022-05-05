@@ -17,7 +17,7 @@ namespace Settings
         public BoolSetting WeaponTrailEnabled = new BoolSetting(true);
         public BoolSetting WindEffectEnabled = new BoolSetting(false);
         public BoolSetting InterpolationEnabled = new BoolSetting(true);
-        public IntSetting RenderDistance = new IntSetting(1500, minValue: 10, maxValue: 3000);
+        public IntSetting RenderDistance = new IntSetting(1500, minValue: 10, maxValue: 1000000);
         public IntSetting WeatherEffects = new IntSetting(3);
         public BoolSetting AnimatedIntro = new BoolSetting(true);
         // public IntSetting Fov = new IntSetting(50, minValue: 0, maxValue: 1000);

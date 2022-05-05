@@ -5,23 +5,25 @@ namespace Utility
 {
     class CoroutineWithData
     {
-        public Coroutine coroutine { get; private set; }
-        public object result;
+        public Coroutine Coroutine { get; private set; }
+        public object Result;
         private IEnumerator _target;
+        public bool Done = false;
 
         public CoroutineWithData(MonoBehaviour owner, IEnumerator target)
         {
             _target = target;
-            coroutine = owner.StartCoroutine(Run());
+            Coroutine = owner.StartCoroutine(Run());
         }
 
         private IEnumerator Run()
         {
             while (_target.MoveNext())
             {
-                result = _target.Current;
-                yield return result;
+                Result = _target.Current;
+                yield return Result;
             }
+            Done = true;
         }
     }
 }

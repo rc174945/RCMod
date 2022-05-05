@@ -3,10 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 using UnityEngine;
 
-public static class RCextensions
+static class RCextensions
 {
+    static readonly string HexPattern = @"(\[)[\w]{6}(\])";
+    static readonly Regex HexRegex = new Regex(HexPattern);
+
     public static void Add<T>(ref T[] source, T value)
     {
         T[] localArray = new T[source.Length + 1];
@@ -34,60 +38,8 @@ public static class RCextensions
 
     public static string StripHex(this string text)
     {
-        if (text.IsNullOrEmpty())
-        {
-            return text;
-        }
-        text = text.Replace("[-]", string.Empty);
-        if (text.IsNullOrEmpty() || text.Length < 8)
-        {
-            return text;
-        }
-        if (text.Length > 20)
-        {
-            int num;
-            if (text[7] == ']' && int.TryParse(text.Substring(1, 2), System.Globalization.NumberStyles.HexNumber, null, out num) && int.TryParse(text.Substring(3, 2), System.Globalization.NumberStyles.HexNumber, null, out num) && int.TryParse(text.Substring(5, 2), System.Globalization.NumberStyles.HexNumber, null, out num) && ((text = text.Remove(0, 8)).IsNullOrEmpty() || text.Length < 8))
-            {
-                return text;
-            }
-            for (int i = text.IndexOf("[", 0, text.Length, System.StringComparison.CurrentCulture); i >= 0; i = text.IndexOf("[", i, text.Length - i, System.StringComparison.CurrentCulture))
-            {
-                if (i >= text.Length)
-                {
-                    break;
-                }
-                if (text.Substring(i).Length > 7 && text[i + 7] == ']' && int.TryParse(text.Substring(i + 1, 2), System.Globalization.NumberStyles.HexNumber, null, out num) && int.TryParse(text.Substring(i + 3, 2), System.Globalization.NumberStyles.HexNumber, null, out num) && int.TryParse(text.Substring(i + 5, 2), System.Globalization.NumberStyles.HexNumber, null, out num))
-                {
-                    if ((text = text.Remove(i, 8)).IsNullOrEmpty() || text.Length < 8 || i >= text.Length)
-                    {
-                        return text;
-                    }
-                }
-                else if (++i < 0 || i >= text.Length || text.Length < 8)
-                {
-                    return text;
-                }
-            }
-        }
-        else
-        {
-            int num2 = text.Length + 1;
-            for (int i = 0; i < text.Length; i++)
-            {
-                num2--;
-                int num;
-                if (text[i] == '[' && num2 > 7 && text[i + 7] == ']' && int.TryParse(text.Substring(i + 1, 2), System.Globalization.NumberStyles.HexNumber, null, out num) && int.TryParse(text.Substring(i + 3, 2), System.Globalization.NumberStyles.HexNumber, null, out num) && int.TryParse(text.Substring(i + 5, 2), System.Globalization.NumberStyles.HexNumber, null, out num))
-                {
-                    text = text.Remove(i, 8);
-                    num2 -= 7;
-                    i--;
-                }
-            }
-        }
-        return text;
+        return HexRegex.Replace(text, "");
     }
-
-
 
     public static string hexColor(this string text)
     {

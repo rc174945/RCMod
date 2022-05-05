@@ -21,13 +21,10 @@ public class MapCeiling : MonoBehaviour
 
     public static void CreateMapCeiling()
     {
-        if (SettingsManager.LegacyGameSettings.BombModeEnabled.Value)
-        {
-            if (FengGameManagerMKII.level.StartsWith("The Forest"))
-                CreateMapCeilingWithDimensions(_forestHeight, _forestWidth, _depth);
-            else if (FengGameManagerMKII.level.StartsWith("The City"))
-                CreateMapCeilingWithDimensions(_cityHeight, _cityWidth, _depth);
-        }
+        if (FengGameManagerMKII.level.StartsWith("The Forest"))
+            CreateMapCeilingWithDimensions(_forestHeight, _forestWidth, _depth);
+        else if (FengGameManagerMKII.level.StartsWith("The City"))
+            CreateMapCeilingWithDimensions(_cityHeight, _cityWidth, _depth);
     }
 
     static void CreateMapCeilingWithDimensions(float height, float width, float depth)

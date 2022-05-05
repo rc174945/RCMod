@@ -11,7 +11,7 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
-public class CannonPropRegion : Photon.MonoBehaviour
+class CannonPropRegion : Photon.MonoBehaviour
 {
     public bool destroyed;
     public bool disabled;

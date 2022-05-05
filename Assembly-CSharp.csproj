@@ -257,6 +257,7 @@
     <Compile Include="Scripts\Anticheat\InstantiateTracker.cs" />
     <Compile Include="Scripts\Anticheat\KickState.cs" />
     <Compile Include="Scripts\ApplicationManagers\ApplicationConfig.cs" />
+    <Compile Include="Scripts\CustomSkins\CustomSkinParts\HookCustomSkinPart.cs" />
     <Compile Include="Scripts\GameProgress\GameProgressContainer.cs" />
     <Compile Include="Scripts\GameProgress\AchievmentCount.cs" />
     <Compile Include="Scripts\GameProgress\AchievmentContainer.cs" />
@@ -332,6 +333,7 @@
     <Compile Include="Scripts\Settings\SettingTypes\PresetSettingsContainer.cs" />
     <Compile Include="Scripts\Settings\SettingTypes\SetSettingsContainer.cs" />
     <Compile Include="Scripts\Settings\ProfileSettings.cs" />
+    <Compile Include="Scripts\Settings\SettingTypes\NameSetting.cs" />
     <Compile Include="Scripts\Settings\Weather\WeatherSet.cs" />
     <Compile Include="Scripts\Settings\Weather\WeatherSettings.cs" />
     <Compile Include="Scripts\UI\Elements\ElementStyle.cs" />
@@ -726,7 +728,7 @@
     <Compile Include="Scripts\Utility\SimpleAES.cs" />
     <Compile Include="Scripts\Utility\SimpleJSON.cs" />
     <Compile Include="Scripts\Utility\SingletonFactory.cs" />
-    <Compile Include="Scripts\Utility\TextureScale.cs" />
+    <Compile Include="Scripts\CustomSkins\TextureScaler.cs" />
     <Compile Include="Scripts\Weather\WeatherScheduleRunner.cs" />
     <Compile Include="Unorganized\BillboardScript.cs" />
     <Compile Include="Unorganized\BodyPushBox.cs" />
@@ -761,5 +763,4 @@
     <Compile Include="Unorganized\Test_CSharp.cs" />
     <Compile Include="Unorganized\UIadjustment.cs" />
   </ItemGroup>
-  <ItemGroup />
 </Project>

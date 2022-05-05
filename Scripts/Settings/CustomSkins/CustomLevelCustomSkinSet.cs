@@ -2,6 +2,6 @@
 {
     class CustomLevelCustomSkinSet: BaseSetSetting
     {
-        public StringSetting Ground = new StringSetting(string.Empty);
+        public StringSetting Ground = new StringSetting(string.Empty, maxLength: 200);
     }
 }
