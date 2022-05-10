@@ -38,7 +38,7 @@ public class TextureScaler
         Thread thread = new Thread(ts);
         thread.Start(threadData);
         while (thread.IsAlive)
-            yield return null;
+            yield return new WaitForEndOfFrame();
         tex.Resize(newWidth, newHeight);
         tex.SetPixels(newColors);
         yield return new WaitForEndOfFrame();

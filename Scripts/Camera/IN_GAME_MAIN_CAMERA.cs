@@ -71,6 +71,7 @@ class IN_GAME_MAIN_CAMERA : MonoBehaviour
     public static IN_GAME_MAIN_CAMERA Instance;
     private Transform _transform;
     private UILabel _bottomRightText;
+    private static float _lastRestartTime = 0f;
 
     private void Awake()
     {
@@ -647,8 +648,10 @@ class IN_GAME_MAIN_CAMERA : MonoBehaviour
             }
             if (SettingsManager.InputSettings.General.RestartGame.GetKeyDown())
             {
-                if (gametype != GAMETYPE.SINGLE && PhotonNetwork.isMasterClient)
+                float timeDiff = Time.realtimeSinceStartup - _lastRestartTime;
+                if (gametype != GAMETYPE.SINGLE && PhotonNetwork.isMasterClient && timeDiff > 2f)
                 {
+                    _lastRestartTime = Time.realtimeSinceStartup;
                     object[] objArray = new object[] { "<color=#FFCC00>MasterClient has restarted the game!</color>", "" };
                     FengGameManagerMKII.instance.photonView.RPC("Chat", PhotonTargets.All, objArray);
                     FengGameManagerMKII.instance.restartRC();
