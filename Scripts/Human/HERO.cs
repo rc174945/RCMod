@@ -1923,6 +1923,10 @@ class HERO : Photon.MonoBehaviour
                     {
                         this.speedFXPS.enableEmission = false;
                     }
+                    if (this.state == HERO_STATE.Attack && this.useGun)
+                    {
+                        this.baseTransform.rotation = Quaternion.Lerp(this.baseTransform.rotation, this.gunDummy.transform.rotation, Time.deltaTime * 30f);
+                    }
                 }
             }
             this.setHookedPplDirection();
@@ -5137,7 +5141,6 @@ class HERO : Photon.MonoBehaviour
                             }
                             else
                             {
-                                this.baseTransform.rotation = Quaternion.Lerp(this.baseTransform.rotation, this.gunDummy.transform.rotation, Time.deltaTime * 30f);
                                 if (!this.attackReleased && (this.baseAnimation[this.attackAnimation].normalizedTime > 0.167f))
                                 {
                                     GameObject obj4;
