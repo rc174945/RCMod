@@ -6,9 +6,10 @@
 
     public class XWeaponTrail : MonoBehaviour
     {
-        public float Fps = 60f;
+        private float fps = 60f;
+        private float deltaTime;
         public int Granularity = 60;
-        public int MaxFrame = 14;
+        public int MaxFrame;
         protected float mElapsedTime;
         protected float mFadeElapsedime;
         protected float mFadeT = 1f;
@@ -30,7 +31,6 @@
 
         public void Activate()
         {
-            this.MaxFrame = 14;
             this.Init();
             if (this.mMeshObj == null)
             {
@@ -73,6 +73,7 @@
         {
             if (!this.mInited)
             {
+                this.MaxFrame = 60;
                 Vector3 vector = this.PointStart.position - this.PointEnd.position;
                 this.mTrailWidth = vector.magnitude;
                 this.InitMeshObj();
@@ -178,6 +179,9 @@
         {
             if (this.mInited)
             {
+                deltaTime += (Time.deltaTime - deltaTime) * 0.1f;
+                this.fps = 1.0f / deltaTime;
+
                 if (this.mMeshObj == null)
                 {
                     this.InitMeshObj();
@@ -296,7 +300,7 @@
         {
             get
             {
-                return (1f / this.Fps);
+                return (1f / this.fps);
             }
         }
 
