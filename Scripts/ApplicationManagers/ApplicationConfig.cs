@@ -18,7 +18,7 @@ namespace ApplicationManagers
         public const int AssetBundleVersion = 20211122;
 
         // must be manually changed every update
-        public const string GameVersion = "5/5/2022";
+        public const string GameVersion = "11/02/2023";
 
         public static void Init()
         {

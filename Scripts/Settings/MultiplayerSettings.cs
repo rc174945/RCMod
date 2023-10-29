@@ -22,14 +22,16 @@ namespace Settings
             { MultiplayerRegion.EU, "app-eu.exitgamescloud.com" },
             { MultiplayerRegion.US, "app-us.exitgamescloud.com" },
             { MultiplayerRegion.SA, "app-sa.exitgames.com" },
-            { MultiplayerRegion.ASIA, "app-asia.exitgamescloud.com" }
+            { MultiplayerRegion.ASIA, "app-asia.exitgamescloud.com" },
+            { MultiplayerRegion.CN, "app-asia.exitgamescloud.com" }
         };
         public readonly Dictionary<MultiplayerRegion, string> PublicAddresses = new Dictionary<MultiplayerRegion, string>()
         {
             { MultiplayerRegion.EU, "135.125.239.180" },
             { MultiplayerRegion.US, "142.44.242.29" },
-            { MultiplayerRegion.SA, "172.107.193.233" },
+            { MultiplayerRegion.SA, "108.181.69.221" },
             { MultiplayerRegion.ASIA, "51.79.164.137" },
+            { MultiplayerRegion.CN, "47.116.117.128" }
         };
         public readonly int DefaultPort = 5055;
 
@@ -96,7 +98,8 @@ namespace Settings
         EU,
         US,
         SA,
-        ASIA
+        ASIA,
+        CN
     }
 
     public enum LobbyModeType

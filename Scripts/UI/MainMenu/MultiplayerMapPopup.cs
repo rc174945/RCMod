@@ -34,6 +34,8 @@ namespace UI
             }
             string cat = "MainMenu";
             string sub = "MultiplayerMapPopup";
+            ElementFactory.CreateDefaultButton(BottomBar, style, "China Server",
+                onClick: () => OnButtonClick("ButtonCN"));
             ElementFactory.CreateDefaultButton(BottomBar, style, "LAN",
                 onClick: () => OnButtonClick("LAN"));
             ElementFactory.CreateDefaultButton(BottomBar, style, UIManager.GetLocale(cat, sub, "ButtonOffline"),
@@ -83,6 +85,9 @@ namespace UI
                     break;
                 case "ButtonASIA":
                     settings.ConnectServer(MultiplayerRegion.ASIA);
+                    break;
+                case "ButtonCN":
+                    settings.ConnectServer(MultiplayerRegion.CN);
                     break;
             }
         }
