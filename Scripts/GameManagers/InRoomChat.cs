@@ -727,7 +727,7 @@ public class InRoomChat : Photon.MonoBehaviour
         if (this.AlignBottom)
         {
             GuiRect = new Rect(0f, (float) (Screen.height - 500), 300f, 470f);
-            GuiRect2 = new Rect(30f, (float) ((Screen.height - 300) + 0x113), 300f, 25f);
+            GuiRect2 = new Rect(SettingsManager.UISettings.CenteredFlares.Value ? 0f : 30f, (float) ((Screen.height - 300) + 0x113), 300f, 25f);
         }
     }
 

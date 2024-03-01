@@ -22,6 +22,7 @@ namespace Settings
         public IntSetting ChatLines = new IntSetting(15);
         public IntSetting ChatWidth = new IntSetting(150);
         public IntSetting ChatHeight = new IntSetting(100);
+        public BoolSetting CenteredFlares = new BoolSetting(false);
 
         public override void Apply()
         {
