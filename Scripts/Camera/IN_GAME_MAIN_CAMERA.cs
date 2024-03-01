@@ -318,7 +318,10 @@ class IN_GAME_MAIN_CAMERA : MonoBehaviour
 
     public void setHUDposition()
     {
-        GameObject.Find("Flare").transform.localPosition = new Vector3((float) (((int) (-Screen.width * 0.5f)) + 14), (float) ((int) (-Screen.height * 0.5f)), 0f);
+        if (!SettingsManager.UISettings.CenteredFlares.Value)
+            GameObject.Find("Flare").transform.localPosition = new Vector3((float) (((int) (-Screen.width * 0.5f)) + 14), (float) ((int) (-Screen.height * 0.5f)), 0f);
+        else
+            GameObject.Find("Flare").transform.localPosition = new Vector3(0f, (float)((int)(-Screen.height * 0.5f + 37f)), 0f);
         GameObject obj2 = GameObject.Find("LabelInfoBottomRight");
         obj2.transform.localPosition = new Vector3((float) ((int) (Screen.width * 0.5f)), (float) ((int) (-Screen.height * 0.5f)), 0f);
         GameObject.Find("LabelInfoTopCenter").transform.localPosition = new Vector3(0f, (float) ((int) (Screen.height * 0.5f)), 0f);
