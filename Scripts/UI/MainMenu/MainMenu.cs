@@ -79,9 +79,9 @@ namespace UI
 
         private void SetupLabels()
         {
-            GameObject patreonButton = ElementFactory.InstantiateAndBind(transform, "Aottg2DonateButton");
-            ElementFactory.SetAnchor(patreonButton, TextAnchor.UpperRight, TextAnchor.UpperRight, new Vector2(-20f, -20f));
-            patreonButton.GetComponent<Button>().onClick.AddListener(() => OnIntroButtonClick("Donate"));
+            GameObject patreonButton = ElementFactory.CreateDefaultButton(transform, new ElementStyle(), "Download Aottg2",
+                onClick: () => OnIntroButtonClick("Donate"), elementWidth: 240f, elementHeight: 70f);
+            ElementFactory.SetAnchor(patreonButton, TextAnchor.UpperRight, TextAnchor.UpperRight, new Vector2(-40f, -460f));
             _multiplayerStatusLabel = ElementFactory.CreateDefaultLabel(transform, ElementStyle.Default, string.Empty).GetComponent<Text>();
             ElementFactory.SetAnchor(_multiplayerStatusLabel.gameObject, TextAnchor.UpperLeft, TextAnchor.UpperLeft, new Vector2(20f, -20f));
             _multiplayerStatusLabel.color = Color.white;
@@ -133,7 +133,7 @@ namespace UI
                     Application.Quit();
                     break;
                 case "Donate":
-                    Application.OpenURL("https://www.patreon.com/aottg2");
+                    Application.OpenURL("https://www.aottg2.com");
                     break;
             }
         }
